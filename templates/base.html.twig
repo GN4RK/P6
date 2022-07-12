@@ -2,11 +2,67 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+        <div class="container">
+            {% block nav %}
+                <nav class="navbar navbar-expand d-none d-sm-inline">
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <img src="{{ asset('img/snowboard.jpg') }}" alt="logo" width="100">
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/trick/create">Tricks</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/signin">Sign in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/signup">Sign up</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <nav class="navbar navbar-expand d-sm-none d-inline fixed-bottom bg-light ">
+                    <div class="row">
+                        <div class="col">
+                            <a class="nav-link display-5 text-center" href="/">
+                                <i class="fa-solid fa-house-chimney"></i>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a class="nav-link display-5 text-center" href="/trick/create">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a class="nav-link display-5 text-center" href="/signin">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </nav>
+            {% endblock %}
+
+            {% block body %}{% endblock %}
+            
+            {% block footer %}
+                <footer class="d-none d-sm-inline">
+                    Copyright &copy; GN4RK {{ 'now' | date('Y') }}
+                </footer>
+            {% endblock %}
+
+            {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+        </div>
     </body>
 </html>
