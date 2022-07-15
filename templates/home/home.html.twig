@@ -7,13 +7,23 @@
 {% block body %}
     <div class="card text-black">
         <img src="{{ asset('img/mountain.jpg') }}" class="card-img" alt="mountain">
-        <div class="card-img-overlay">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-                This is a wider card with supporting text below as a 
-                natural lead-in to additional content. This content 
-                is a little bit longer.
-            </p>
+        <div class="card-img-overlay" style="color: white;text-shadow: 2px 2px 2px black;">
+            <h1 class="card-title">Welcome in SnowTricks !</h1>
         </div>
     </div>
+
+
+    <div class="d-flex flex-wrap">
+        {% for trick in tricks %}
+            <div class="card" style="width: 18rem;">
+                <img src="" class="card-img-top" alt="image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ trick.name|capitalize }}</h5>
+                    <a href="trick/details/{{ trick.name }}" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
 {% endblock %}
