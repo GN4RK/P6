@@ -18,9 +18,7 @@ use function PHPUnit\Framework\isEmpty;
 
 class TrickController extends AbstractController
 {
-    /**
-     * @Route("/trick/details/{slug}", name="trick_details")
-     */
+    #[Route('/trick/details/{slug}', name: 'trick_details')]
     public function details(string $slug, ManagerRegistry $doctrine, Request $request): Response
     {
        
@@ -42,9 +40,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/trick/create", name="trick_create")
-     */
+    #[Route('/trick/create', name: 'trick_create')]
     public function create(ManagerRegistry $doctrine, Request $request): Response
     {
         // TODO get current logged user
