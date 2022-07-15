@@ -12,18 +12,21 @@
         </div>
     </div>
 
-
     <div class="d-flex flex-wrap">
         {% for trick in tricks %}
             <div class="card" style="width: 18rem;">
                 <img src="" class="card-img-top" alt="image">
                 <div class="card-body">
-                    <h5 class="card-title">{{ trick.name|capitalize }}</h5>
-                    <a href="trick/details/{{ trick.name }}" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">
+                        <a href="trick/details/{{ trick.slug }}" class="btn btn-primary">
+                            {{ trick.name|capitalize }}
+                        </a>
+                        <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+                    </h5>
                 </div>
             </div>
         {% endfor %}
     </div>
-
 
 {% endblock %}
