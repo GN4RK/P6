@@ -55,11 +55,15 @@
             {% endblock %}
 
             {% block body %}{% endblock %}
+
+            <hr class="my-4">
             
             {% block footer %}
-                <footer class="d-none d-sm-inline">
+            <div style="min-height: 120px;">
+                <footer class="d-none d-sm-block" >
                     Copyright &copy; GN4RK {{ 'now' | date('Y') }}
                 </footer>
+            </div>
             {% endblock %}
 
             {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}

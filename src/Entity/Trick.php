@@ -40,6 +40,9 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class)]
     private $media;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $slug;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -179,6 +182,18 @@ class Trick
                 $medium->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

@@ -10,9 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class HomeController extends AbstractController
 {
-    /**
-     * @Route("/", name="home")
-     */
+    #[Route('/', name: 'home')]
     public function home(ManagerRegistry $doctrine): Response
     {
         $tricksRepository = $doctrine->getRepository(Trick::class);
