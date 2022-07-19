@@ -57,7 +57,7 @@ class TrickController extends AbstractController
             $trick->setUser($user);
             $trick->setDate(new \DateTime());
             $slugger = new AsciiSlugger();
-            $trick->setSlug($slugger->slug($trick->getName()));
+            $trick->setSlug(strtolower($slugger->slug($trick->getName())));
             
             $tricksRepository = $doctrine->getRepository(Trick::class);
             $trickAlreadyInDB = $tricksRepository->findOneBy(['name' => $trick->getName()]);
