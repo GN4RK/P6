@@ -43,6 +43,9 @@ class Trick
     #[ORM\Column(type: 'string', length: 255)]
     private $slug;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $FeaturedImage;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -194,6 +197,18 @@ class Trick
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getFeaturedImage(): ?string
+    {
+        return $this->FeaturedImage;
+    }
+
+    public function setFeaturedImage(?string $FeaturedImage): self
+    {
+        $this->FeaturedImage = $FeaturedImage;
 
         return $this;
     }

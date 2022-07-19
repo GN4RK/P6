@@ -5,21 +5,29 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
+    <div class="card mb-3">
         <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
         <div class="card-img-overlay d-flex align-items-center">
-            <h1 class="mx-auto" style="color: white;text-shadow: 2px 2px 2px black;"> {{ trick.name|capitalize }} </h1>
+            <h1 class="mx-auto" style="color: white;text-shadow: 2px 2px 2px black;">
+                {{ trick.name|capitalize }}
+            </h1>
         </div>
     </div>
 
-    <div class="d-flex flex-wrap">
-        {% for media in trick.media %}
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    {{ media.content|raw}}
+    <div class="d-none d-sm-block mb-3">
+        <div class="d-flex flex-wrap">
+            {% for media in trick.media %}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        {{ media.content|raw}}
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="d-block d-sm-none mx-auto mb-3" style="width: 120px;">
+        <button type="button" class="btn btn-primary">See medias</button>
     </div>
 
     <div>
