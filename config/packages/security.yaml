@@ -24,6 +24,9 @@ security:
             form_login:
                 login_path: sign_in
                 check_path: sign_in
+            
+            logout:
+                path: log_out
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
