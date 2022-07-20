@@ -59,4 +59,10 @@ class SignController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/logout', name: 'log_out')]
+    public function logOut(): Response {
+        return new Response();
+    }
+
 }
