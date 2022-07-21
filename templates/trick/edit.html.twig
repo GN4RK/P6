@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    SnowTricks - {{ trick.name|capitalize }}
+{% endblock %}
+
+{% block body %}
+    <div class="card mb-3">
+        <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
+        <div class="card-img-overlay d-flex align-items-center">
+            {% if app.user %}
+                <div 
+                    class="d-flex justify-content-evenly rounded 
+                        bg-light p-2 position-absolute top-0 end-0 m-3" 
+                    style=" width:90px;">
+                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+            {% endif %}
+            <h1 class="mx-auto" style="color: white;text-shadow: 2px 2px 2px black;">
+                {{ trick.name|capitalize }}
+            </h1>
+        </div>
+    </div>
+
+    <div class="d-none d-sm-block mb-3">
+        <div class="d-flex flex-wrap justify-content-evenly">
+            {% for media in trick.media %}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        {{ media.content|raw}}
+                    </div>
+                    {% if app.user %}
+                        <div 
+                            class="d-flex justify-content-evenly border 
+                                border-secondary rounded bg-light p-1 m-2" 
+                            style=" width:90px;">
+                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="d-block d-sm-none mx-auto mb-3" style="width: 120px;">
+        <button type="button" class="btn btn-primary">See medias</button>
+    </div>
+
+    <div>
+        <p>
+            {{ trick.description }}
+        </p>
+    </div>
+    <div class="d-flex flex-wrap justify-content-evenly">
+        <div class="border rounded p-2">
+            Added on {{ trick.date|date("d/m/Y") }}
+        </div>
+        <div class="border rounded p-2">
+            Category : {{ trick.category }}
+        </div>
+        {% if trick.lastUpdate is not null %}
+            <div class="border rounded p-2">
+               last update on {{ trick.lastUpdate|date("d/m/Y") }}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
