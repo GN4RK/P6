@@ -14,7 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SignController extends AbstractController
 {
-    #[Route('/signin', name: 'sign_in')]
+    #[Route('/sign/in', name: 'sign_in')]
     public function signIn(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -25,7 +25,7 @@ class SignController extends AbstractController
         ]);
     }
 
-    #[Route('/signup', name: 'sign_up')]
+    #[Route('/sign/up', name: 'sign_up')]
     public function signUp(UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine, Request $request): Response
     {
         $user = new User();
@@ -46,17 +46,16 @@ class SignController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
-
-   
         }
-
-
-
-
 
         return $this->render('sign/signup.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/sign/logout', name: 'log_out')]
+    public function logOut(): Response {
+        return new Response();
+    }
+
 }

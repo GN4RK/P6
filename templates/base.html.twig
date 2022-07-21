@@ -13,42 +13,56 @@
             {% block nav %}
                 <nav class="navbar navbar-expand d-none d-sm-inline">
                     <div class="collapse navbar-collapse">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div class="navbar-nav " style="height: 50px;">
+                            <img src="{{ asset('img/logo.png') }}" alt="logo" height="50px">
+                        </div>
+                        <ul class="navbar-nav ml-auto" style="height: 50px; margin-left: auto">
                             <li class="nav-item">
-                                <img src="{{ asset('img/snowboard.jpg') }}" alt="logo" width="100">
+                                <a class="nav-link" href="{{ path('home') }}">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/">Home</a>
+                                <a class="nav-link" href="{{ path('trick_create') }}">Tricks</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/trick/create">Tricks</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/signin">Sign in</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/signup">Sign up</a>
-                            </li>
+                            {% if app.user %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('log_out') }}">Log out</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('sign_in') }}">Sign in</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('sign_up') }}">Sign up</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </nav>
                 <nav class="navbar navbar-expand d-sm-none d-inline fixed-bottom bg-light">
                     <div class="row">
                         <div class="col">
-                            <a class="nav-link display-5 text-center" href="/">
+                            <a class="nav-link display-5 text-center" href="{{ path('home') }}">
                                 <i class="fa-solid fa-house-chimney"></i>
                             </a>
                         </div>
                         <div class="col">
-                            <a class="nav-link display-5 text-center" href="/trick/create">
+                            <a class="nav-link display-5 text-center" href="{{ path('trick_create') }}">
                                 <i class="fa-solid fa-bookmark"></i>
                             </a>
                         </div>
-                        <div class="col">
-                            <a class="nav-link display-5 text-center" href="/signin">
-                                <i class="fa-solid fa-right-to-bracket"></i>
-                            </a>
-                        </div>
+                        {% if app.user %}
+                            <div class="col">
+                                <a class="nav-link display-5 text-center" href="{{ path('log_out') }}">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <a class="nav-link display-5 text-center" href="{{ path('sign_in') }}">
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                </a>
+                            </div>
+                        {% endif %}
 
                     </div>
                 </nav>
@@ -66,7 +80,50 @@
             </div>
             {% endblock %}
 
-            {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+            {% block javascripts %}
+                {{ encore_entry_script_tags('app') }}
+                <script language = "javascript" 
+                    src = "https://code.jquery.com/jquery-2.2.4.min.js"></script>
+                
+                <script language = "javascript">
+
+                    let start = 5;
+
+                    $(document).ready(function(){   
+                        $("#loadMoreTricks").on("click", function(event){  
+                            $.ajax({  
+                                url:        '/' + start,  
+                                type:       'POST',   
+                                dataType:   'json',  
+                                async:      true,  
+                                
+                                success: function(data, status) {
+                                    start += 5;
+                                    
+                                    for(i = 0; i < data.length; i++) {
+                                        $('#tricks').append('');
+                                        trick = data[i];
+                                        var e = $('<div class="card my-2" style="width: 18rem;"> <img id="img" class="card-img-top" alt="image"> <div class="card-body"> <h5 class="card-title"> <a id="link" class="btn btn-primary"> </a> <a href="#"> <i class="fa-solid fa-pen-to-square"> </i> </a> <a href="#"> <i class="fa-solid fa-trash-can"> </i> </a> </h5> </div> </div>');
+                                        
+                                        $('#link', e).html(trick['name']);
+                                        var url = "{{ path('trick_details', {'slug': 'trick-slug' }) }} ";
+                                        url = url.replace("trick-slug", trick.slug);
+                                        $('#link', e).attr("href", url);
+
+                                        $('#img', e).attr("src", "{{ asset('img/mountain.jpg') }}");
+
+                                        
+                                        $('#tricks').append(e);
+                                    }
+                                },
+                                error : function(xhr, textStatus, errorThrown) {
+                                    alert('Ajax request failed.');  
+                                }
+                            });
+                        });
+                    });
+                </script>
+            {% endblock %}
         </div>
     </body>
 </html>
