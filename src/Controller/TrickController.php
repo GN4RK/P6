@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-use function PHPUnit\Framework\isEmpty;
-
 class TrickController extends AbstractController
 {
     #[Route('/trick/details/{slug}', name: 'trick_details')]
@@ -23,19 +21,26 @@ class TrickController extends AbstractController
     {
        
         $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
-        dump($trick);
-
-        // TODO get current logged user
-        $user = $doctrine->getRepository(User::class)->find(1);
-
+        $user = $this->getUser();
         $comment = new Comment();
+
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
-        $commentForm->createView();
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+
+            $comment->setUser($user);
+            $comment->setTrick($trick);
+            $comment->setDate(new \DateTime());
+
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+        }
         
         return $this->render('trick/details.html.twig', [
             'trick' => $trick,
-            'user' => $user,
             'commentForm' => $commentForm->createView(),
         ]);
     }
@@ -43,8 +48,9 @@ class TrickController extends AbstractController
     #[Route('/trick/create', name: 'trick_create')]
     public function create(ManagerRegistry $doctrine, Request $request): Response
     {
-        // TODO get current logged user
-        $user = $doctrine->getRepository(User::class)->find(1);
+        // current user
+        $user = $this->getUser();
+        
         if (empty($user)) return $this->redirectToRoute('error_you_have_to_be_logged_in');
 
         $trick = new Trick();
@@ -75,6 +81,21 @@ class TrickController extends AbstractController
 
         return $this->render('trick/create.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/trick/edit/{slug}', name: 'trick_edit')]
+    public function edit(string $slug, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $user = $this->getUser();        
+        if (empty($user)) return $this->redirectToRoute('error_you_have_to_be_logged_in');
+
+        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
+
+        
+        
+        return $this->render('trick/edit.html.twig', [
+            'trick' => $trick
         ]);
     }
 

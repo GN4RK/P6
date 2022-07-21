@@ -41,8 +41,6 @@ class SignController extends AbstractController
                 $user->getPassword()
             ));
 
-            dump($user);
-
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();

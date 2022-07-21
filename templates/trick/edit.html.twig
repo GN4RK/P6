@@ -67,34 +67,4 @@
         {% endif %}
     </div>
 
-    <hr class="my-4">
-
-    {% if app.user %}
-        {{ form(commentForm) }}
-        <hr class="my-4">
-    {% endif %}
-
-    {% if trick.comments|length < 1 %}
-        No comment
-    {% else %}
-        {% for comment in trick.comments %}
-            <div class="row my-4">
-                <div class="col-md-2 col-3">
-                    {{ comment.user.photo }}
-                    {{ comment.user.username }}
-                </div>
-                <div class="col-md-10 col-9">
-                    {{ comment.content }}
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-
-
-
-
-
-
-
 {% endblock %}
