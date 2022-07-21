@@ -20,12 +20,15 @@
             <div class="card my-2" style="width: 18rem;">
                 <img src="{{ asset('img/mountain.jpg') }}" class="card-img-top" alt="image">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title d-flex justify-content-evenly">
                         <a href="{{ path('trick_details', {'slug': trick.slug}) }}" class="btn btn-primary">
                             {{ trick.name|capitalize }}
                         </a>
-                        <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+                        {% if app.user %}
+                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+                        {% endif %}
+                        
                     </h5>
                 </div>
             </div>
