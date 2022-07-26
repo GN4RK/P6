@@ -18,6 +18,6 @@ class SignUpType extends AbstractType
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
-            ->add('save', SubmitType::class, ['label' => 'Register']);
+            ->add('save', SubmitType::class, ['label' => 'Create an account']);
     }    
 }
