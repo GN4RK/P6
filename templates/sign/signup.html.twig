@@ -5,7 +5,16 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        {{ form(form) }}
-    </div>
+    <h1 class="text-center">Registration</h1>
+    <div class="container border rounded mt-4 p-4" style="max-width: 600px;">
+
+
+        <div class="form-group mt-3 text-center">
+            {{ form(form) }}
+
+            <div class="my-4 d-sm-none d-inline">
+                <a href="{{ path('sign_in') }}">Already an account ?</a>
+            </div>
+        </div>
+    </div> 
 {% endblock %}
