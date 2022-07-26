@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\Type\SignUpType;
+use App\Form\Type\ForgotPasswordType;
 use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,6 +49,28 @@ class SignController extends AbstractController
 
         return $this->render('sign/signup.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/sign/forgot_password', name: 'forgot_password')]
+    public function forgotPassword(Request $request): Response {
+
+        $user = new User();
+        $form = $this->createForm(ForgotPasswordType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+        }
+
+
+
+
+
+
+        return $this->render('sign/forgot_password.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 

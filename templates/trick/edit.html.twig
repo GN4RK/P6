@@ -55,14 +55,14 @@
     </div>
     <div class="d-flex flex-wrap justify-content-evenly">
         <div class="border rounded p-2">
-            Added on {{ trick.date|date("d/m/Y") }}
+            Added on {{ trick.date|date("d/m/Y", "Europe/Paris") }}
         </div>
         <div class="border rounded p-2">
             Category : {{ trick.category }}
         </div>
         {% if trick.lastUpdate is not null %}
             <div class="border rounded p-2">
-               last update on {{ trick.lastUpdate|date("d/m/Y") }}
+               last update on {{ trick.lastUpdate|date("d/m/Y", "Europe/Paris") }}
             </div>
         {% endif %}
     </div>
