@@ -35,6 +35,7 @@ class Trick
     private $user;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OrderBy(["date" => "DESC"])]
     private $comments;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class)]
