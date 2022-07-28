@@ -70,6 +70,24 @@
 
             <hr>
 
+            {% block messages %}
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success">
+                        {{ flashMessage }}
+                    </div>    
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="alert alert-danger">
+                        {{ flashMessage }}
+                    </div>    
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('warning') %}
+                    <div class="alert alert-warning">
+                        {{ flashMessage }}
+                    </div>    
+                {% endfor %}
+            {% endblock %}
+
             {% block body %}{% endblock %}
 
             <hr class="d-none d-sm-block my-4">
@@ -96,10 +114,10 @@
                                 '<div class="card-body"> '+
                                     '<h5 class="card-title d-flex justify-content-evenly"> '+
                                         '<a id="link" class="btn btn-primary"> </a> '+
-                                        '<a id="edit" href="#"> '+
+                                        '<a id="edit"> '+
                                             '<i class="fa-solid fa-pen-to-square"> </i> '+
                                         '</a> '+
-                                        '<a id="delete" href="#"> '+
+                                        '<a id="delete"> '+
                                             '<i class="fa-solid fa-trash-can"> </i> '+
                                         '</a> '+
                                     '</h5> '+
@@ -148,9 +166,17 @@
                                         var e = trickTemplate.clone();
                                         
                                         $('#link', e).html(trick['name']);
-                                        var url = "{{ path('trick_details', {'slug': 'trick-slug' }) }} ";
-                                        url = url.replace("trick-slug", trick.slug);
-                                        $('#link', e).attr("href", url);
+                                        var urlLink = "{{ path('trick_details', {'slug': 'trick-slug' }) }} ";
+                                        urlLink = urlLink.replace("trick-slug", trick.slug);
+                                        $('#link', e).attr("href", urlLink);
+
+                                        var urlEdit = "{{ path('trick_edit', {'slug': 'trick-slug' }) }} ";
+                                        urlEdit = urlEdit.replace("trick-slug", trick.slug);
+                                        $('#edit', e).attr("href", urlEdit);
+
+                                        var urlDelete = "{{ path('trick_delete', {'slug': 'trick-slug' }) }} ";
+                                        urlDelete = urlDelete.replace("trick-slug", trick.slug);
+                                        $('#delete', e).attr("href", urlDelete);
 
                                         $('#img', e).attr("src", "{{ asset('img/mountain.jpg') }}");
                                         
