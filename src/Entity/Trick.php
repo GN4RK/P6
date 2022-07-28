@@ -34,7 +34,7 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["date" => "DESC"])]
     private $comments;
 
