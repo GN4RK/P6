@@ -50,8 +50,11 @@ class TrickController extends AbstractController
     {
         // current user
         $user = $this->getUser();
-        
-        if (empty($user)) return $this->redirectToRoute('error_you_have_to_be_logged_in');
+
+        if (empty($user)) {
+            $this->addFlash('error', 'You have to be logged in to view this page');
+            return $this->redirectToRoute('sign_in');
+        }
 
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -69,12 +72,15 @@ class TrickController extends AbstractController
             $trickAlreadyInDB = $tricksRepository->findOneBy(['name' => $trick->getName()]);
 
             if ($trickAlreadyInDB) {
-                return $this->redirectToRoute('error_name_already_used');
+                $this->addFlash('error', 'Name already used');
+                return $this->redirectToRoute('trick_create');
             }
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($trick);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Trick successfully created.');
 
             return $this->redirectToRoute('trick_details', ['slug' => $trick->getSlug()]);
         }
@@ -87,8 +93,11 @@ class TrickController extends AbstractController
     #[Route('/trick/edit/{slug}', name: 'trick_edit')]
     public function edit(string $slug, ManagerRegistry $doctrine, Request $request): Response
     {
-        $user = $this->getUser();        
-        if (empty($user)) return $this->redirectToRoute('error_you_have_to_be_logged_in');
+        $user = $this->getUser();
+        if (empty($user)) {
+            $this->addFlash('error', 'You have to be logged in to edit a trick');
+            return $this->redirectToRoute('home');
+        }
 
         $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
 
@@ -97,6 +106,26 @@ class TrickController extends AbstractController
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick
         ]);
+    }
+
+    #[Route('/trick/delete/{slug}', name: 'trick_delete')]
+    public function delete(string $slug, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $user = $this->getUser();
+        if (empty($user)) {
+            $this->addFlash('error', 'You have to be logged in to edit a trick');
+            return $this->redirectToRoute('home');
+        }
+        
+        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
+
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($trick);
+        $entityManager->flush();
+        
+        $this->addFlash('warning', 'Trick ['. $trick->getName(). '] deleted.');
+
+        return $this->redirectToRoute('home');
     }
 
 }

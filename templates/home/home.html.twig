@@ -25,8 +25,13 @@
                             {{ trick.name|capitalize }}
                         </a>
                         {% if app.user %}
-                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+                            <a href="{{ path('trick_edit', {'slug': trick.slug}) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a href="{{ path('trick_delete', {'slug': trick.slug}) }}" 
+                                onclick="return confirm('Are you sure ?')">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
                         {% endif %}
                         
                     </h5>
