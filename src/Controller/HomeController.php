@@ -17,13 +17,15 @@ class HomeController extends AbstractController
     {
         $tricksRepository = $doctrine->getRepository(Trick::class);
         // first 5 tricks loaded
-        $tricks = $tricksRepository->findBy([], ['date' => 'DESC'], 5, 5);
+        $tricks = $tricksRepository->findBy([], ['date' => 'DESC'], 5, 0);
 
-        return $this->render('home/home.html.twig', ['tricks' => $tricks]);
+        return $this->render('home/home.html.twig', [
+            'tricks' => $tricks,
+        ]);
     }
 
     #[Route('/start/{start}', name: 'home_ajax')]
-    public function homeAjax(ManagerRegistry $doctrine, Request $request, mixed $start = 0): Response
+    public function homeAjax(ManagerRegistry $doctrine, Request $request, int $start = 5): Response
     {
         $tricksRepository = $doctrine->getRepository(Trick::class);
         $tricks = $tricksRepository->findBy([], ['date' => 'DESC'], 5, $start);
