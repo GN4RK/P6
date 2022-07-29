@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    SnowTricks - {{ trick.name|capitalize }}
+{% endblock %}
+
+{% block body %}
+    {{ form(form) }}
+{% endblock %}

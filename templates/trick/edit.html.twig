@@ -8,15 +8,13 @@
     <div class="card mb-3">
         <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
         <div class="card-img-overlay d-flex align-items-center">
-            {% if app.user %}
-                <div 
-                    class="d-flex justify-content-evenly rounded 
-                        bg-light p-2 position-absolute top-0 end-0 m-3" 
-                    style=" width:90px;">
-                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="#"><i class="fa-solid fa-trash-can"></i></a>
-                </div>
-            {% endif %}
+            <div 
+                class="d-flex justify-content-evenly rounded 
+                    bg-light p-2 position-absolute top-0 end-0 m-3" 
+                style=" width:90px;">
+                <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="#"><i class="fa-solid fa-trash-can"></i></a>
+            </div>
             <h1 class="mx-auto" style="color: white;text-shadow: 2px 2px 2px black;">
                 {{ trick.name|capitalize }}
             </h1>
@@ -26,21 +24,18 @@
     <div class="d-none d-sm-block mb-3">
         <div class="d-flex flex-wrap justify-content-evenly">
             {% for media in trick.media %}
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        {{ media.content|raw}}
-                    </div>
-                    {% if app.user %}
-                        <div 
-                            class="d-flex justify-content-evenly border 
-                                border-secondary rounded bg-light p-1 m-2" 
-                            style=" width:90px;">
-                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a href="#"><i class="fa-solid fa-trash-can"></i></a>
-                        </div>
-                    {% endif %}
-                </div>
+                {% include 'trick/viewer.html.twig' %}
             {% endfor %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <a href="{{ path('trick_add_image', {'slug': trick.slug}) }}" type="button" class="btn btn-primary">
+                        Add image
+                    </a>
+                    <a href="{{ path('trick_add_youtube', {'slug': trick.slug}) }}" type="button" class="btn btn-primary">
+                        Add youtube
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -48,23 +43,43 @@
         <button type="button" class="btn btn-primary">See medias</button>
     </div>
 
-    <div>
-        <p>
-            {{ trick.description }}
-        </p>
-    </div>
     <div class="d-flex flex-wrap justify-content-evenly">
         <div class="border rounded p-2">
             Added on {{ trick.date|date("d/m/Y", "Europe/Paris") }}
         </div>
-        <div class="border rounded p-2">
-            Category : {{ trick.category }}
-        </div>
+
         {% if trick.lastUpdate is not null %}
             <div class="border rounded p-2">
-               last update on {{ trick.lastUpdate|date("d/m/Y", "Europe/Paris") }}
+            last update on {{ trick.lastUpdate|date("d/m/Y", "Europe/Paris") }}
             </div>
         {% endif %}
     </div>
+
+    {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+        {{ form_row(form.name) }}
+        Description
+        {{ form_widget(form.description, {
+            'attr': {
+                'rows' : 10,
+                'class' : 'mb-3'
+            }
+        }) }}
+        {{ form_row(form.category) }}
+
+        <a href="{{ path('trick_delete', {'slug': trick.slug}) }}" class="btn btn-danger" 
+            onclick="return confirm('Are you sure ?')">
+            <i class="fa-solid fa-trash-can"></i> Delete
+        </a>
+        {{ form_widget(form.save, { 
+            'label': '<i class="fa-solid fa-floppy-disk"></i> Save',
+            'label_html': true
+        }) }}
+        <a href="{{ path('trick_details', {'slug': trick.slug}) }}" class="btn btn-primary">
+            <i class="fa-solid fa-eye"></i> View Trick
+        </a>
+          
+    {{ form_end(form) }}
 
 {% endblock %}
