@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Entity\Comment;
 use App\Form\Type\TrickType;
 use App\Form\Type\CommentType;
@@ -100,20 +99,44 @@ class TrickController extends AbstractController
         }
 
         $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
 
-        
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $trick = $form->getData();
+
+            $tricksRepository = $doctrine->getRepository(Trick::class);
+            $trickAlreadyInDB = $tricksRepository->findOneBy(['name' => $trick->getName()]);
+            if ($trickAlreadyInDB && $trickAlreadyInDB->getId() != $trick->getId()) {
+                $this->addFlash('error', 'Name already used');
+                return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
+            }
+            $slugger = new AsciiSlugger();
+            $trick->setSlug(strtolower($slugger->slug($trick->getName())));
+            
+            $trick->setLastUpdate(new \DateTime());
+
+            $entityManager = $doctrine->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Trick successfully edited.');
+
+            return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
+        }
         
         return $this->render('trick/edit.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/trick/delete/{slug}', name: 'trick_delete')]
-    public function delete(string $slug, ManagerRegistry $doctrine, Request $request): Response
+    public function delete(string $slug, ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
         if (empty($user)) {
-            $this->addFlash('error', 'You have to be logged in to edit a trick');
+            $this->addFlash('error', 'You have to be logged in to delete a trick');
             return $this->redirectToRoute('home');
         }
         
