@@ -44,7 +44,8 @@ class Trick
     #[ORM\Column(type: 'string', length: 255)]
     private $slug;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: Media::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private $FeaturedImage;
 
     public function __construct()
@@ -202,12 +203,12 @@ class Trick
         return $this;
     }
 
-    public function getFeaturedImage(): ?string
+    public function getFeaturedImage(): ?Media
     {
         return $this->FeaturedImage;
     }
 
-    public function setFeaturedImage(?string $FeaturedImage): self
+    public function setFeaturedImage(?Media $FeaturedImage): self
     {
         $this->FeaturedImage = $FeaturedImage;
 
