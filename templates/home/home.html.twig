@@ -15,10 +15,14 @@
         </div>
     </div>
 
-    <div id="tricks" class="d-flex flex-wrap justify-content-around">
+    <div id="tricks" class="d-flex flex-wrap justify-content-around mb-3">
         {% for trick in tricks %}
             <div class="card my-2" style="width: 18rem;">
-                <img src="{{ asset('img/mountain.jpg') }}" class="card-img-top" alt="image">
+                {% if trick.FeaturedImage %}
+                    <img class="card-img" src="{{ asset('upload/img/' ~ trick.FeaturedImage.content ) }}" alt="Card image">
+                {% else %}
+                    <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title d-flex justify-content-evenly">
                         <a href="{{ path('trick_details', {'slug': trick.slug}) }}" class="btn btn-primary">
@@ -39,11 +43,11 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="text-center">
         <button id="loadMoreTricks" class="btn btn-primary">
             Load More
         </button>
-    <div>
-
     </div>
 
 
