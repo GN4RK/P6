@@ -6,4 +6,7 @@
 
 {% block body %}
     {{ form(form) }}
+    <a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
+        <i class="fa-solid fa-arrow-left"></i> Back to Trick
+    </a>
 {% endblock %}
