@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    SnowTricks - {{ trick.name|capitalize }}
+{% endblock %}
+
+{% block body %}
+    <div class="">
+        Format has to be 
+        <pre>https://www.youtube.com/watch?v=xxxxxxxxxxx</pre>
+    </div>
+    {{ form(form) }}
+    <a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
+        <i class="fa-solid fa-arrow-left"></i> Back to Trick
+    </a>
+{% endblock %}
