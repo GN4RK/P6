@@ -6,7 +6,11 @@
 
 {% block body %}
     <div class="card mb-3">
-        <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
+        {% if trick.FeaturedImage %}
+            <img class="card-img" src="{{ asset('upload/img/' ~ trick.FeaturedImage.content ) }}" alt="Card image">
+        {% else %}
+            <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
+        {% endif %}
         <div class="card-img-overlay d-flex align-items-center">
             {% if app.user %}
                 <div 
@@ -23,7 +27,7 @@
         </div>
     </div>
 
-    <div class="d-none d-sm-block mb-3">
+    <div id="media" class="d-none d-sm-block mb-3">
         <div class="d-flex flex-wrap justify-content-evenly">
             {% for media in trick.media %}
                 {% include 'trick/viewer.html.twig' %}
@@ -32,7 +36,7 @@
     </div>
 
     <div class="d-block d-sm-none mx-auto mb-3" style="width: 120px;">
-        <button type="button" class="btn btn-primary">See medias</button>
+        <button type="button" class="btn btn-primary" onclick="$('#media').attr('style', 'display: inline !important'); $(this).hide();">See medias</button>
     </div>
 
     <div>
@@ -41,22 +45,27 @@
         </p>
     </div>
     <div class="d-flex flex-wrap justify-content-evenly">
-        <div class="border rounded p-2">
+        <div class="border rounded p-2 mb-3">
             Added on {{ trick.date|date("d/m/Y", "Europe/Paris") }}
         </div>
-        <div class="border rounded p-2">
+        <div class="border rounded p-2 mb-3">
             Category : {{ trick.category }}
         </div>
         {% if trick.lastUpdate is not null %}
-            <div class="border rounded p-2">
+            <div class="border rounded p-2 mb-3">
                last update on {{ trick.lastUpdate|date("d/m/Y", "Europe/Paris") }}
             </div>
         {% endif %}
     </div>
 
-    <a href=" {{ path('trick_edit', {'slug': trick.slug }) }}" class="btn btn-primary">
-        <i class="fa-solid fa-pen-to-square"></i> Edit trick
-    </a>
+    {% if app.user %}
+        <div class="text-center">
+            <a href=" {{ path('trick_edit', {'slug': trick.slug }) }}" class="btn btn-primary">
+                <i class="fa-solid fa-pen-to-square"></i> Edit trick
+            </a>
+        </div>
+    {% endif %}
+
 
     <hr class="my-4">
 
@@ -64,10 +73,15 @@
         {% if app.user %}
             {{ form(commentForm) }}
             <hr class="my-4">
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                You have to be logged in to post a comment.
+            </div>
+          
         {% endif %}
 
         {% if trick.comments|length < 1 %}
-            No comment
+            No comment yet.
         {% else %}
             {% for comment in trick.comments %}
                 <div class="my-4 d-flex">
