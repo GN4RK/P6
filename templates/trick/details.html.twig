@@ -26,20 +26,7 @@
     <div class="d-none d-sm-block mb-3">
         <div class="d-flex flex-wrap justify-content-evenly">
             {% for media in trick.media %}
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        {{ media.content|raw}}
-                    </div>
-                    {% if app.user %}
-                        <div 
-                            class="d-flex justify-content-evenly border 
-                                border-secondary rounded bg-light p-1 m-2" 
-                            style=" width:90px;">
-                            <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a href="#"><i class="fa-solid fa-trash-can"></i></a>
-                        </div>
-                    {% endif %}
-                </div>
+                {% include 'trick/viewer.html.twig' %}
             {% endfor %}
         </div>
     </div>
@@ -66,6 +53,10 @@
             </div>
         {% endif %}
     </div>
+
+    <a href=" {{ path('trick_edit', {'slug': trick.slug }) }}" class="btn btn-primary">
+        <i class="fa-solid fa-pen-to-square"></i> Edit trick
+    </a>
 
     <hr class="my-4">
 
