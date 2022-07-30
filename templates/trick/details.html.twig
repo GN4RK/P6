@@ -5,27 +5,8 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card mb-3">
-        {% if trick.FeaturedImage %}
-            <img class="card-img" src="{{ asset('upload/img/' ~ trick.FeaturedImage.content ) }}" alt="Card image">
-        {% else %}
-            <img class="card-img" src="{{ asset('img/mountain.jpg') }}" alt="Card image">
-        {% endif %}
-        <div class="card-img-overlay d-flex align-items-center">
-            {% if app.user %}
-                <div 
-                    class="d-flex justify-content-evenly rounded 
-                        bg-light p-2 position-absolute top-0 end-0 m-3" 
-                    style=" width:90px;">
-                    <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="#"><i class="fa-solid fa-trash-can"></i></a>
-                </div>
-            {% endif %}
-            <h1 class="mx-auto" style="color: white;text-shadow: 2px 2px 2px black;">
-                {{ trick.name|capitalize }}
-            </h1>
-        </div>
-    </div>
+
+    {% include 'trick/trick_card.html.twig' %}
 
     <div id="media" class="d-none d-sm-block mb-3">
         <div class="d-flex flex-wrap justify-content-evenly">

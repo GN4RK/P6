@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Asset\Packages;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media

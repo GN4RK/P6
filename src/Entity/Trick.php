@@ -38,14 +38,14 @@ class Trick
     #[ORM\OrderBy(["date" => "DESC"])]
     private $comments;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade: ["persist", "remove"])]
     private $media;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $slug;
 
-    #[ORM\ManyToOne(targetEntity: Media::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne(targetEntity: Media::class, cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private $FeaturedImage;
 
     public function __construct()

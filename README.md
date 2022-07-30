@@ -1,0 +1,3 @@
+# php.ini
+post_max_size = 40M
+upload_max_filesize = 40M
