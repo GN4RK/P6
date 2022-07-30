@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Entity\Comment;
+use App\Entity\Media;
 use App\Form\Type\TrickType;
 use App\Form\Type\CommentType;
+use App\Form\Type\FeaturedType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -149,6 +151,43 @@ class TrickController extends AbstractController
         $this->addFlash('warning', 'Trick ['. $trick->getName(). '] deleted.');
 
         return $this->redirectToRoute('home');
+    }
+
+    #[Route('/trick/edit/featured/{slug}', name: 'trick_edit_featured')]
+    public function editFeatured(string $slug, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $user = $this->getUser();
+        if (empty($user)) {
+            $this->addFlash('error', 'You have to be logged in to delete a trick');
+            return $this->redirectToRoute('home');
+        }
+        
+        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
+        $media_list = $doctrine->getRepository(Media::class)->findBy([
+            'trick' => $trick,
+            'type' => 'image',
+        ]);
+        $form = $this->createForm(FeaturedType::class, $trick, ['data' => $media_list]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $featuredImage = $form->getData()["featuredImage"];            
+            $trick->setLastUpdate(new \DateTime());
+            $trick->setFeaturedImage($featuredImage);
+
+            $entityManager = $doctrine->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Trick successfully edited.');
+
+            return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
+        }
+        
+        return $this->render('trick/editFeatured.html.twig', [
+            'trick' => $trick,
+            'form' => $form->createView(),
+        ]);
     }
 
 }

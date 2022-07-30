@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Entity\Media;
 use App\Form\Type\ImageType;
+use App\Form\Type\YoutubeType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,20 +80,40 @@ class MediaController extends AbstractController
 
         $media = new Media();
 
-        $form = $this->createForm(ImageType::class, $media);
+        $form = $this->createForm(YoutubeType::class, $media);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-           
+            $media = $form->getData();
+
+            if (!str_contains($media->getContent(), "https://www.youtube.com/watch?v=")) {
+                $this->addFlash('error', 'Bad format.');
+                return $this->render('trick/add_youtube.html.twig', [
+                    'trick' => $trick,
+                    'form' => $form->createView(),
+                ]);
+            }
+
+
+
+            $media->setTrick($trick);
+            $media->setType("youtube");
+            $media->setDate(new \DateTime());
+
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($media);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Media successfully created.');
+
+            return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
         }
 
-        return $this->render('trick/add_image.html.twig', [
+        return $this->render('trick/add_youtube.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
         ]);
-
-
     }
 
     #[Route('/media/delete/{id}', name: 'delete_media')]

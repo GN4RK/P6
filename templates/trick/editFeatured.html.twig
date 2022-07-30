@@ -9,4 +9,11 @@
     <a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
         <i class="fa-solid fa-arrow-left"></i> Back to Trick
     </a>
+
+    <script>
+    $(".form-check label").each(function(){
+        $(this).html('<img src="' + window.location.origin + '/upload/img/' + $(this).html() + '" />')
+    })
+    </script>
+      
 {% endblock %}

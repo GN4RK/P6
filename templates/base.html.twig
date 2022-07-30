@@ -11,64 +11,10 @@
     <body>
         <div class="container">
             {% block nav %}
-                <nav class="navbar navbar-expand d-none d-sm-inline">
-                    <div class="collapse navbar-collapse">
-                        <div class="navbar-nav " style="height: 50px;">
-                            <img src="{{ asset('img/logo.png') }}" alt="logo" height="50px">
-                        </div>
-                        <ul class="navbar-nav ml-auto" style="height: 50px; margin-left: auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('home') }}">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('trick_create') }}">Tricks</a>
-                            </li>
-                            {% if app.user %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('log_out') }}">Log out</a>
-                                </li>
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('sign_in') }}">Sign in</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('sign_up') }}">Sign up</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </nav>
-                <nav class="navbar navbar-expand d-sm-none d-inline fixed-bottom bg-light">
-                    <div class="row">
-                        <div class="col">
-                            <a class="nav-link display-5 text-center" href="{{ path('home') }}">
-                                <i class="fa-solid fa-house-chimney"></i>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a class="nav-link display-5 text-center" href="{{ path('trick_create') }}">
-                                <i class="fa-solid fa-bookmark"></i>
-                            </a>
-                        </div>
-                        {% if app.user %}
-                            <div class="col">
-                                <a class="nav-link display-5 text-center" href="{{ path('log_out') }}">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                </a>
-                            </div>
-                        {% else %}
-                            <div class="col">
-                                <a class="nav-link display-5 text-center" href="{{ path('sign_in') }}">
-                                    <i class="fa-solid fa-right-to-bracket"></i>
-                                </a>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                </nav>
+                {% include 'navbar.html.twig' %}
             {% endblock %}
 
-            <hr>
+            <hr class="d-none d-sm-block my-4">
 
             {% block messages %}
                 {% for flashMessage in app.session.flashbag.get('success') %}
@@ -193,6 +139,10 @@
                             });
                         });
                     });
+
+                    $(".form-check label").each(function(){
+                        $(this).html('<img src="' + window.location.origin + '/upload/img/' + $(this).html() + '" />')
+                    })
                 </script>
             {% endblock %}
         </div>

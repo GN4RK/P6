@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Asset\Packages;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
@@ -25,6 +26,11 @@ class Media
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'media')]
     #[ORM\JoinColumn(nullable: false)]
     private $trick;
+
+    public function __toString()
+    {
+        return $this->content;
+    }
 
     public function getId(): ?int
     {
