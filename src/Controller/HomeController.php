@@ -36,6 +36,9 @@ class HomeController extends AbstractController
                 $response[] = array (
                     'name' => $trick->getName(),
                     'slug' => $trick->getSlug(),
+                    'featuredImage' => ($trick->getFeaturedImage() != null) ? 
+                        $trick->getFeaturedImage()->getContent() 
+                        : null
                 );
             }
 
