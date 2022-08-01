@@ -190,4 +190,24 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[Route('/trick/edit/unlinkfeatured/{slug}', name: 'trick_unlink_featured')]
+    public function unlinkFeatured(string $slug, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $user = $this->getUser();
+        if (empty($user)) {
+            $this->addFlash('error', 'You have to be logged in to edit a trick');
+            return $this->redirectToRoute('home');
+        }
+        
+        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
+        $trick->setFeaturedImage(null);
+
+        $entityManager = $doctrine->getManager();
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Featured image unlinked successfully.');
+
+        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
+    }
+
 }
