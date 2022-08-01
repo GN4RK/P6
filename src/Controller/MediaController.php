@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Filesystem\Filesystem;
 
 class MediaController extends AbstractController
 {
@@ -42,7 +43,7 @@ class MediaController extends AbstractController
                 $extension = 'bin';
             }
 
-            $newFileName = rand(1, 99999).'.'.$extension;
+            $newFileName = uniqid (rand(1000000,9999999), true).'.'.$extension;
             $file->move($directory, $newFileName);
 
             $media->setTrick($trick);
@@ -127,6 +128,12 @@ class MediaController extends AbstractController
         
         $media = $doctrine->getRepository(Media::class)->findOneBy(['id' => $id]);
         $trick = $media->getTrick();
+
+        // delete file if the media is an image
+        if ($media->getType() == "image") {
+            $filesystem = new Filesystem();
+            $filesystem->remove(['upload/img/'. $media->getContent()]);
+        }
 
         $entityManager = $doctrine->getManager();
         $entityManager->remove($media);
