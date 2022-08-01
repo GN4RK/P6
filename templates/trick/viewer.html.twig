@@ -25,7 +25,7 @@
                 border-secondary rounded bg-light p-1 m-2" 
             style=" width:90px;">
             <a href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-            <a href="{{ path('delete_media', {'id': media.id}) }}" onclick="return confirm('Are you sure ?')"><i class="fa-solid fa-trash-can"></i></a>
+            <a href="{{ path('delete_media', {'id': media.id}) }}" onclick="return confirm('Delete media ?')"><i class="fa-solid fa-trash-can"></i></a>
         </div>
     {% endif %}
 </div>
