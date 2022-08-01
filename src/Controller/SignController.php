@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class SignController extends AbstractController
 {
@@ -27,7 +29,7 @@ class SignController extends AbstractController
     }
 
     #[Route('/sign/up', name: 'sign_up')]
-    public function signUp(UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine, Request $request): Response
+    public function signUp(UserPasswordHasherInterface $passwordHasher, ManagerRegistry $doctrine, Request $request, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(SignUpType::class, $user);
@@ -36,7 +38,7 @@ class SignController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $user = $form->getData();
-            $user->setStatus("pending");
+            $user->setStatus("pending" . uniqid (rand(1000000,9999999), true));
             $user->setPassword($passwordHasher->hashPassword(
                 $user,
                 $user->getPassword()
@@ -45,6 +47,24 @@ class SignController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+
+            // sending validation email
+            $email = (new Email())
+            ->from('yoann.leonard@gmail.com')
+            ->to('yoann.leonard@gmail.com')
+            ->subject('SnowTricks - Please validate your email adress')
+            ->html(
+                '<p>Welcome in Snowtricks !</p>' .
+                '<p>Please click on the link below to validate your email adress</p>'.
+                '<a href="' . $request->getSchemeAndHttpHost() .
+                '/validate/' . $user->getUsername() .
+                '/' . $user->getStatus().
+                '">LINK</a>'
+            );
+
+            $mailer->send($email);
+            $this->addFlash('success', "Please check your email to validate your user account.");
+            
         }
 
         return $this->render('sign/signup.html.twig', [
