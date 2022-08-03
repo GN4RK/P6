@@ -16,7 +16,7 @@ class Comment
     #[ORM\Column(type: 'datetime')]
     private $date;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     private $content;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
