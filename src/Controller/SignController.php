@@ -51,7 +51,7 @@ class SignController extends AbstractController
             // sending validation email
             $email = (new Email())
             ->from('yoann.leonard@gmail.com')
-            ->to('yoann.leonard@gmail.com')
+            ->to($user->getEmail())
             ->subject('SnowTricks - Please validate your email adress')
             ->html(
                 '<p>Welcome in Snowtricks !</p>' .
@@ -73,13 +73,38 @@ class SignController extends AbstractController
     }
 
     #[Route('/sign/forgot_password', name: 'forgot_password')]
-    public function forgotPassword(Request $request): Response {
+    public function forgotPassword(Request $request, ManagerRegistry $doctrine, MailerInterface $mailer): Response {
 
-        $user = new User();
-        $form = $this->createForm(ForgotPasswordType::class, $user);
+        $form = $this->createForm(ForgotPasswordType::class);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $user = new User();
+            $username = $form->getData()['username'];
+            $user = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
+
+            if ($user) {
+                $user->setNewToken();
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // sending mail with token to reset password
+                $email = (new Email())
+                ->from('yoann.leonard@gmail.com')
+                ->to($user->getEmail())
+                ->subject('SnowTricks - Forgot Password')
+                ->html(
+                    '<p>To reset your password, please click on the link below</p>'.
+                    '<a href="' . $request->getSchemeAndHttpHost() .
+                    '/reset/' . $user->getToken().
+                    '">LINK</a>'
+                );
+    
+                $mailer->send($email);
+                $this->addFlash('success', "Please check your email to reset your password.");
+            }
 
 
         }
