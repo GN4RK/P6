@@ -88,7 +88,25 @@
 
                 <script language = "javascript">
 
+                    var commentTemplate = $(
+                        '<div class="my-4 d-flex"> '+
+                            '<div class="me-2"> '+
+                                '{# {{ comment.user.photo }} #} '+
+                                '<img id="photo" src="{{ asset("img/logo.png") }}" alt="logo" width= "50px" height="50px"> '+
+                            '</div> '+
+                            '<div class="border w-100 p-2"> '+
+                                '<span id="username" class="fw-bold"> '+
+                                '</span> '+
+                                '<span id="date" class="fw-light"> '+
+                                '</span> '+
+                                '<div id="content" class=""> '+
+                                '</div> '+
+                            '</div> '+
+                        '</div>'
+                    );
+
                     var start = 5;
+                    var startComment = 5;
 
                     $(document).ready(function(){
                         $("#loadMoreTricks").on("click", function(event){
@@ -143,11 +161,54 @@
                                 }
                             });
                         });
-                    });
 
-                    $(".form-check label").each(function(){
-                        $(this).html('<img width="200" src="' + window.location.origin + '/upload/img/' + $(this).html() + '" class="img-thumbnail" alt="image">')
-                    })
+
+
+                        $("#loadMoreComments").on("click", function(event){
+
+                            $("#loadMoreComments").text('Loading...');
+                            $("#loadMoreComments").addClass("disabled");
+
+                            $.ajax({  
+                                url:        window.location.href + '/start/' + startComment,  
+                                type:       'POST',   
+                                dataType:   'json',  
+                                async:      true,  
+                                
+                                success: function(data, status) {
+                                    startComment += 5;
+                                    
+                                    for (i = 0; i < data.length; i++) {
+                                        var e = commentTemplate.clone();
+                                        com = data[i];
+
+                                        var dateCom = new Date(com['date']['date']);
+                                        dateCom.setHours(dateCom.getHours() + 2);
+                                        dateCom = dateCom.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
+
+                                        $('#username', e).html(com['username']);
+                                        $('#date', e).html(dateCom);
+                                        $('#content', e).html(com['content']);
+
+                                        $('#comments').append(e);
+                                    }
+
+                                   $("#loadMoreComments").text('Load More');
+                                   $("#loadMoreComments").removeClass("disabled");
+
+                                },
+                                error : function(xhr, textStatus, errorThrown) {
+                                    alert('Ajax request failed.');  
+                                }
+                            });
+                        });
+
+
+                        $(".form-check label").each(function(){
+                            $(this).html('<img width="200" src="' + window.location.origin + '/upload/img/' + $(this).html() + '" class="img-thumbnail" alt="image">')
+                        })
+
+                    });
                 </script>
             {% endblock %}
         </div>

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TrickController extends AbstractController
 {
@@ -208,6 +209,34 @@ class TrickController extends AbstractController
         $this->addFlash('success', 'Featured image unlinked successfully.');
 
         return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
+    }
+
+    #[Route('/trick/details/{slug}/start/{start}', name: 'comment_ajax')]
+    public function moreCommentsAjax(string $slug, ManagerRegistry $doctrine, Request $request, int $start = 5): Response
+    {
+        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
+        $comments = $trick->getComments();
+        $end = $start + 5;
+
+        if ($end > count($comments)) $end = count($comments);
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+            $response = array();
+
+            for ($i = $start; $i < $end; $i++) {
+                $user = $comments[$i]->getUser();
+                $response[] = array (
+                    'photo' => $user->getPhoto(),
+                    'username' => $user->getUsername(),
+                    'date' => $comments[$i]->getDate(),
+                    'content' => $comments[$i]->getContent()
+                );
+            }
+
+            return new JsonResponse($response);
+        }
+
+        return $this->redirectToRoute('home');
     }
 
 }
