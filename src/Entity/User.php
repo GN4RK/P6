@@ -42,6 +42,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
     private $tricks;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -188,5 +191,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function setNewToken(): self
+    {
+        $newtoken = (new \DateTime())->format('Y-m-d-H-i-s-') . uniqid (rand(1000000,9999999), true);
+        $this->setToken($newtoken);
+
+        return $this;
     }
 }
