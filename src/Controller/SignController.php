@@ -105,15 +105,8 @@ class SignController extends AbstractController
                 $mailer->send($email);
                 $this->addFlash('success', "Please check your email to reset your password.");
             }
-
-
         }
-
-
-
-
-
-
+        
         return $this->render('sign/forgot_password.html.twig', [
             'form' => $form->createView()
         ]);
