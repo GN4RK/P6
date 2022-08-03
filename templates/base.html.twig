@@ -162,8 +162,6 @@
                             });
                         });
 
-
-
                         $("#loadMoreComments").on("click", function(event){
 
                             $("#loadMoreComments").text('Loading...');
@@ -189,6 +187,7 @@
                                         $('#username', e).html(com['username']);
                                         $('#date', e).html(dateCom);
                                         $('#content', e).html(com['content']);
+                                        $('#photo', e).attr("src", "https://avatars.dicebear.com/api/human/" + com['username'] + ".svg");
 
                                         $('#comments').append(e);
                                     }

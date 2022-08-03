@@ -15,7 +15,7 @@ use App\Form\Type\ResetPasswordType;
 class UserController extends AbstractController
 {
     #[Route('/deleteuser/{id}', name: 'delete_user')]
-    public function deleteUser(int $id, ManagerRegistry $doctrine, Request $request): Response
+    public function deleteUser(int $id, ManagerRegistry $doctrine): Response
     {
         $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $id]);
         if (empty($user)) {
@@ -33,7 +33,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/validate/{username}/{token}', name: 'validate')]
-    public function validateUser(string $username, string $token, ManagerRegistry $doctrine, Request $request): Response
+    public function validateUser(string $username, string $token, ManagerRegistry $doctrine): Response
     {
         $user = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
 
