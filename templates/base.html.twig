@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-        <!-- Font Awesome icons (free version)-->
+        <!-- Font Awesome icons (free version) -->
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
@@ -106,7 +106,7 @@
                     );
 
                     var start = 5;
-                    var startComment = 5;
+                    var startComment = 10;
 
                     $(document).ready(function(){
                         $("#loadMoreTricks").on("click", function(event){
@@ -174,7 +174,7 @@
                                 async:      true,  
                                 
                                 success: function(data, status) {
-                                    startComment += 5;
+                                    startComment += 10;
                                     
                                     for (i = 0; i < data.length; i++) {
                                         var e = commentTemplate.clone();
@@ -201,7 +201,6 @@
                                 }
                             });
                         });
-
 
                         $(".form-check label").each(function(){
                             $(this).html('<img width="200" src="' + window.location.origin + '/upload/img/' + $(this).html() + '" class="img-thumbnail" alt="image">')

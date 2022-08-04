@@ -6,8 +6,11 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity("name", message: "This name is already used.")]
+#[UniqueEntity("slug", message: "This name is already used.")]
 class Trick
 {
     #[ORM\Id]

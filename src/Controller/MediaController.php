@@ -12,11 +12,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MediaController extends AbstractController
 {
     #[Route('/trick/edit/{slug}/addimage', name: 'trick_add_image')]
-    public function addImage(string $slug, ManagerRegistry $doctrine, Request $request): Response
+    public function addImage(string $slug, ManagerRegistry $doctrine, Request $request, ValidatorInterface $validator): Response
     {
         $user = $this->getUser();
         if (empty($user)) {
@@ -41,6 +44,25 @@ class MediaController extends AbstractController
             if (!$extension) {
                 // extension cannot be guessed
                 $extension = 'bin';
+            }
+
+            $violations = $validator->validate(
+                $file,
+                new File([
+                    'maxSize' => '20M',
+                    'mimeTypes' => [
+                        'image/*'
+                    ]
+                ])
+            );
+
+            if ($violations->count() > 0) {
+                /** @var ConstraintViolation $violation */
+                $violation = $violations[0];
+                $this->addFlash('error', $violation->getMessage());
+                return $this->render('trick/create.html.twig', [
+                    'form' => $form->createView()
+                ]);
             }
 
             $newFileName = uniqid (rand(1000000,9999999), true).'.'.$extension;
@@ -80,7 +102,6 @@ class MediaController extends AbstractController
         $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
 
         $media = new Media();
-
         $form = $this->createForm(YoutubeType::class, $media);
         $form->handleRequest($request);
 
@@ -95,8 +116,6 @@ class MediaController extends AbstractController
                     'form' => $form->createView(),
                 ]);
             }
-
-
 
             $media->setTrick($trick);
             $media->setType("youtube");
