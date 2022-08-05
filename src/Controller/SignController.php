@@ -22,7 +22,7 @@ class SignController extends AbstractController
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('sign/signin.html.twig', [
+        return $this->render('sign/sign_in.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
@@ -67,7 +67,7 @@ class SignController extends AbstractController
             
         }
 
-        return $this->render('sign/signup.html.twig', [
+        return $this->render('sign/sign_up.html.twig', [
             'form' => $form->createView(),
         ]);
     }

@@ -150,7 +150,7 @@ class TrickController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Trick successfully created.');
 
-            return $this->redirectToRoute('trick_details', ['slug' => $trick->getSlug()]);
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('trick/create.html.twig', [
@@ -260,7 +260,7 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
         }
         
-        return $this->render('trick/editFeatured.html.twig', [
+        return $this->render('trick/edit_featured.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
         ]);
