@@ -28,18 +28,14 @@ class MediaController extends AbstractController
         }
         
         $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
-
         $media = new Media();
-
         $form = $this->createForm(ImageType::class, $media);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $directory = "upload/img";
-
             $file = $form['content']->getData();
-
             $extension = $file->guessExtension();
             if (!$extension) {
                 // extension cannot be guessed

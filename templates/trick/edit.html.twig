@@ -6,12 +6,12 @@
 
 {% block body %}
 
-    {% include 'trick/trick_card.html.twig' %}
+    {% include 'trick/_trick_card.html.twig' %}
 
     <div id="media" class="d-none d-sm-block mb-3">
         <div class="d-flex flex-wrap justify-content-evenly">
             {% for media in trick.media %}
-                {% include 'trick/viewer.html.twig' %}
+                {% include 'trick/_viewer.html.twig' %}
             {% endfor %}
         </div>
     </div>
