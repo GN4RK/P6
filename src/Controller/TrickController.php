@@ -7,7 +7,6 @@ use App\Entity\Comment;
 use App\Entity\Media;
 use App\Form\Type\TrickType;
 use App\Form\Type\CommentType;
-use App\Form\Type\FeaturedType;
 use App\Form\Type\NewTrickType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,7 +61,6 @@ class TrickController extends AbstractController
         }
 
         $entityManager = $doctrine->getManager();
-
         $trick = new Trick();
         $form = $this->createForm(NewTrickType::class);
         $form->handleRequest($request);
@@ -102,10 +100,8 @@ class TrickController extends AbstractController
                 $youtube->setTrick($trick);
                 $youtube->setType("youtube");
                 $youtube->setDate(new \DateTime());
-
                 $entityManager->persist($youtube);
                 $this->addFlash('success', 'New youtube video added.');
-
             }
 
             // handling image file
@@ -114,10 +110,6 @@ class TrickController extends AbstractController
                 $directory = "upload/img";
                 $file = $form['image']->getData();
                 $extension = $file->guessExtension();
-                if (!$extension) {
-                    // extension cannot be guessed
-                    $extension = 'bin';
-                }
                 $violations = $validator->validate(
                     $file, 
                     new File([
@@ -142,7 +134,6 @@ class TrickController extends AbstractController
                 $entityManager->persist($image);
                 $trick->setFeaturedImage($image);
                 $this->addFlash('success', 'New image added.');
-
             }
 
             $entityManager = $doctrine->getManager();
@@ -227,63 +218,6 @@ class TrickController extends AbstractController
         $this->addFlash('warning', 'Trick ['. $trick->getName(). '] deleted.');
 
         return $this->redirectToRoute('home');
-    }
-
-    #[Route('/trick/edit/featured/{slug}', name: 'trick_edit_featured')]
-    public function editFeatured(string $slug, ManagerRegistry $doctrine, Request $request): Response
-    {
-        $user = $this->getUser();
-        if (empty($user)) {
-            $this->addFlash('error', 'You have to be logged in to delete a trick');
-            return $this->redirectToRoute('home');
-        }
-        
-        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
-        $media_list = $doctrine->getRepository(Media::class)->findBy([
-            'trick' => $trick,
-            'type' => 'image',
-        ]);
-        $form = $this->createForm(FeaturedType::class, $trick, ['data' => $media_list]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $featuredImage = $form->getData()["featuredImage"];            
-            $trick->setLastUpdate(new \DateTime());
-            $trick->setFeaturedImage($featuredImage);
-
-            $entityManager = $doctrine->getManager();
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Trick successfully edited.');
-
-            return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
-        }
-        
-        return $this->render('trick/edit_featured.html.twig', [
-            'trick' => $trick,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/trick/edit/unlinkfeatured/{slug}', name: 'trick_unlink_featured')]
-    public function unlinkFeatured(string $slug, ManagerRegistry $doctrine, Request $request): Response
-    {
-        $user = $this->getUser();
-        if (empty($user)) {
-            $this->addFlash('error', 'You have to be logged in to edit a trick');
-            return $this->redirectToRoute('home');
-        }
-        
-        $trick = $doctrine->getRepository(Trick::class)->findOneBy(['slug' => $slug]);
-        $trick->setFeaturedImage(null);
-
-        $entityManager = $doctrine->getManager();
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Featured image unlinked successfully.');
-
-        return $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
     }
 
     #[Route('/trick/details/{slug}/start/{start}', name: 'comment_ajax')]
