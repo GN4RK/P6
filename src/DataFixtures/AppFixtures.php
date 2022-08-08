@@ -13,10 +13,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $comments = [];
-        $media = [];
-        $tricks = [];
-
         // users
         $user = new User();
         $user->setUsername('Demo');
