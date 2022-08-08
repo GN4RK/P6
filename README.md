@@ -1,9 +1,10 @@
 # Project informations
 This project is the sixth project of the online course on OpenClassrooms : [Développeur d'application - PHP / Symfony](https://openclassrooms.com/fr/paths/59-developpeur-dapplication-php-symfony)
 
-## Desciption of needs
+## Description of needs
 Develop a community website called SnowTricks which lists all the snowboard tricks added by the user of the application.
-List of pages neede :
+
+List of pages needed :
 - home page displaying a list of the tricks
 - add a new trick page
 - edit a trick page
