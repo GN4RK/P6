@@ -13,6 +13,9 @@ List of pages needed :
 # Installation
 
 ## Clone the project
+```
+git clone https://github.com/libgit2/libgit2
+```
 
 ## Install dependencies 
 ```
