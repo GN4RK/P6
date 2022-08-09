@@ -12,14 +12,16 @@ List of pages needed :
 
 # Installation
 
-## Clone the project
+## Cloning the project
 ```
 git clone https://github.com/GN4RK/P6
 ```
 
-## Install dependencies 
+## Installing dependencies 
 ```
 composer install
+npm install
+npm run dev
 ```
 
 ## Configurations
@@ -52,6 +54,11 @@ php bin/console doctrine:migrations:migrate
 This command will load fresh data into your database
 ```
 php bin/console doctrine:fixtures:load
+```
+
+## Running server
+```
+symfony server:start
 ```
 
 # Badge Codacy
