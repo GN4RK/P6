@@ -12,14 +12,16 @@ List of pages needed :
 
 # Installation
 
-## Clone the project
+## Cloning the project
 ```
-git clone https://github.com/libgit2/libgit2
+git clone https://github.com/GN4RK/P6
 ```
 
-## Install dependencies 
+## Installing dependencies 
 ```
-composer instal
+composer install
+npm install
+npm run dev
 ```
 
 ## Configurations
@@ -27,7 +29,7 @@ composer instal
 ### Database
 Change database connection in .env file : 
 ```
-DATABASE_URL="mysql://root:@localhost/snow_tricks?serverVersion=mariadb-10.4.10&charset=utf8"
+DATABASE_URL="mysql://root:@localhost/database_name?serverVersion=your_server&charset=utf8"
 ```
 
 ### Mailer system
@@ -52,6 +54,11 @@ php bin/console doctrine:migrations:migrate
 This command will load fresh data into your database
 ```
 php bin/console doctrine:fixtures:load
+```
+
+## Running server
+```
+symfony server:start
 ```
 
 # Badge Codacy
