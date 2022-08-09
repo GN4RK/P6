@@ -14,12 +14,12 @@ List of pages needed :
 
 ## Clone the project
 ```
-git clone https://github.com/libgit2/libgit2
+git clone https://github.com/GN4RK/P6
 ```
 
 ## Install dependencies 
 ```
-composer instal
+composer install
 ```
 
 ## Configurations
@@ -27,7 +27,7 @@ composer instal
 ### Database
 Change database connection in .env file : 
 ```
-DATABASE_URL="mysql://root:@localhost/snow_tricks?serverVersion=mariadb-10.4.10&charset=utf8"
+DATABASE_URL="mysql://root:@localhost/database_name?serverVersion=your_server&charset=utf8"
 ```
 
 ### Mailer system
